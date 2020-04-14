@@ -1,62 +1,44 @@
 /**
- * @param {number} num
- * @return {string}
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
  */
-var intToRoman = function(num) {
-  const INT_ROMAN_MAP = {
-    1: 'I',
-    5: 'V',
-    10: 'X',
-    50: 'L',
-    100: 'C',
-    500: 'D',
-    1000: 'M'
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var addTwoNumbers = function(l1, l2) {
+  const arr1 = []
+  const arr2 = []
+  while (l1) {
+    arr1.push(l1.val)
+    l1 = l1.next
   }
-  const tmp = {
-    1: 0,
-    10: 2,
-    100: 4,
-    1000: 6
+  while (l2) {
+    arr2.push(l2.val)
+    l2 = l2.next
+  }
+  arr1.reverse()
+  arr2.reverse()
+  const length = arr1.length > arr2.length ? arr1.length : arr2.length
+  let carry = false
+  let listNode = undefined
+
+  for (let i = 0; i < length; i++) {
+    const result = (arr1[i] || 0) + (arr2[i] || 0) + (carry ? 1 : 0);
+    carry = result > 9
+    const l = new ListNode(carry ? result - 10 : result)
+    l.next = listNode
+    listNode = l
+  }
+  if (carry) {
+    const l = new ListNode(1)
+    l.next = listNode
+    listNode = l
   }
 
-  const INTS = Object.keys(INT_ROMAN_MAP).map(Number)
-  let str = ''
-  let divisor = 1000
-  while (divisor >= 1) {
-    const n = Math.floor(num / divisor)
-    num = num - (divisor * n)
-    const x = INTS.findIndex(n => divisor === n)
-    switch (n) {
-      case 1:
-        str = str + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 2:
-        str = str + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 3:
-        str = str + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 4:
-        str = str + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x + 1]]
-        break
-      case 5:
-        str = str + INT_ROMAN_MAP[INTS[x + 1]]
-        break
-      case 6:
-        str = str + INT_ROMAN_MAP[INTS[x + 1]] + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 7:
-        str = str + INT_ROMAN_MAP[INTS[x + 1]] + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 8:
-        str = str + INT_ROMAN_MAP[INTS[x + 1]] + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x]]
-        break
-      case 9:
-        str = str + INT_ROMAN_MAP[INTS[x]] + INT_ROMAN_MAP[INTS[x + 2]]
-        break
-    }
-
-    divisor = divisor / 10
-  }
-  return str
+  return listNode
 };
